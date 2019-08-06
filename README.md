@@ -1,21 +1,19 @@
 Cloudfs.
+https://developer.openstack.org/api-ref/object-store/
 
 Unlimited drive.
 
-
 cloudfs is a **file system** that stores all its data in the cloud.
+cloudfs store file contents in a CAS designed cloud object storage backend (openstack swift) and files metadata (inode table) in an SQL database (sqlite).
 
-cloudfs store file contents in a cloud object storage backend (openstack swift) and files metadata (inode table) relies on an SQL database (sqlite or remote pgsql)
+
+
 
 
 # Roadmap
 ## Full POC
 * Support for nwjs (fuse-binding & sqlite3)
 * On the fly tar creation
-* 
-## TODO
-* Drop rclone layer (
-
 
 # Features
 * Simple by design

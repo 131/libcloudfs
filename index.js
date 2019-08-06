@@ -31,23 +31,14 @@ const nodeify   = function(worker, self) {
 };
 
 
-let dst_ctx, dst_container;
-
-
 class cloudfs {
 
-  async run() {
-    console.log("Building swift data context");
-
-
-
-    let mountPath = process.platform !== 'win32' ? '/mnt/Movies' : 'M:';
-
-    this.fd = 10;
-    this.files = {};
-
-    console.log("All good, mounting file system");
-    await this.mount(mountPath);
+  constructor(inodes, dst_ctx, dst_container) {
+    this.fd     = 10;
+    this.files  = {};
+    this.inodes        = inodes;
+    this.dst_ctx       = dst_ctx;
+    this.dst_container = dst_container;
   }
 
   async release(file_path, fd) {
@@ -58,6 +49,25 @@ class cloudfs {
 
     ent.close();
     delete this.files[fd];
+  }
+
+  async _open_w(file_path, flags) {
+    throw `Not ready for now`;
+
+    var entry = await this._get_entry(file_path);
+
+    //temp block_path
+    var tmp_uid = guid();
+    var block_path = path.join(RCLONE_REMOTE, tmp_uid);
+    var rfd  = function() {
+      return fs.openSync(block_path, "w+");
+    };
+
+    var block_hash = crypto.createHash('md5'), block_size = 0;
+    this.fd++;
+    this.files[this.fd] = {file_path, entry, block_hash, block_size, tmp_uid, rfd};
+    console.log("OPNEDED IN", this.fd, rfd, block_path);
+    return this.fd;
   }
 
   async open(file_path, flags) {
@@ -73,17 +83,17 @@ class cloudfs {
       console.log("DISABLE OPEN non regular file", file_path, flags);
       throw fuse.EPERM;
     }
-    flags &= ~fs.constants.S_IFMT; //strip format
+    flags &= ~S_IFMT; //strip format
 
     if(flags != O_RDONLY) {
       console.log("DISABLE OPEN WITH ", file_path, flags);
       throw fuse.EPERM;
     }
 
-    var entry = await this._get_entry(file_path);
+    var entry = await this.inodes._get_entry(file_path);
 
     var block_path = sprintf("%s/%s/%s", entry.block_hash.substr(0, 2), entry.block_hash.substr(2, 1), entry.block_hash);
-    var remoteUrl  = Storage.tempURL(dst_ctx, dst_container, block_path);
+    var remoteUrl  = Storage.tempURL(this.dst_ctx, this.dst_container, block_path);
 
     this.fd++;
 
@@ -107,6 +117,10 @@ class cloudfs {
     ent.read(buf, len, pos, cb);
   }
 
+  async create(file_path, mode) {
+    await this.inodes.create(file_path, mode);
+    return this._open_w(file_path);
+  }
 
 
   async mount(mountPath) {
@@ -115,22 +129,21 @@ class cloudfs {
     fuse.mount(mountPath, {
       options : ['allow_other'], //for smbd
 
-      getattr : nodeify(this.getattr, this),
-      readdir : nodeify(this.readdir, this),
-      mkdir   : nodeify(this.mkdir, this),
-      rmdir   : nodeify(this.rmdir, this),
-      rename  : nodeify(this.rename, this),
+      getattr : nodeify(this.inodes.getattr, this.inodes),
+      readdir : nodeify(this.inodes.readdir, this.inodes),
+      mkdir   : nodeify(this.inodes.mkdir, this.inodes),
+      rmdir   : nodeify(this.inodes.rmdir, this.inodes),
+      rename  : nodeify(this.inodes.rename, this.inodes),
+      unlink  : nodeify(this.inodes.unlink, this.inodes),
+      statfs : nodeify(this.inodes.statfs, this.inodes),
 
       read    : this.read.bind(this),
       open    : nodeify(this.open, this),
+      create  : nodeify(this.create, this),
+      release : nodeify(this.release, this),
       //write   : this.write.bind(this),
       //ftruncate : this.ftruncate.bind(this),
 
-      create  : nodeify(this.create, this),
-      unlink  : nodeify(this.unlink, this),
-      release : nodeify(this.release, this),
-
-      statfs : nodeify(this.statfs, this),
 
 
       access : (path, mode, cb) => {console.log('access', arguments); cb(); },

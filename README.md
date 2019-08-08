@@ -8,15 +8,15 @@ cloudfs store file contents in a CAS designed cloud object storage backend [open
 
 
 # Roadmap
-[X] Read Only POC using full openstack creds
-[X] Full Read Only POC using tempUrl keys (no full creds ever required)
+- [X] Read Only POC using full openstack creds
+- [X] Full Read Only POC using tempUrl keys (no full creds ever required)
 
-[X] Writable Inodes POC (rename, delete, mkdir)
-[ ] Writable/editable files
-[ ] Proper deployment flow
-[ ] Support for nwjs (fuse-binding & sqlite3)
-[ ] Embbed configuration/web browse server
-[ ] Publish read-only mode
+- [X] Writable Inodes POC (rename, delete, mkdir)
+- [ ] Writable/editable files
+- [ ] Proper deployment flow
+- [ ] Support for nwjs (fuse-binding & sqlite3)
+- [ ] Embbed configuration/web browse server
+- [ ] Publish read-only mode
 
 
 # Features

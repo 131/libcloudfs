@@ -51,24 +51,7 @@ class cloudfs {
     delete this.files[fd];
   }
 
-  async _open_w(file_path, flags) {
-    throw `Not ready for now`;
 
-    var entry = await this._get_entry(file_path);
-
-    //temp block_path
-    var tmp_uid = guid();
-    var block_path = path.join(RCLONE_REMOTE, tmp_uid);
-    var rfd  = function() {
-      return fs.openSync(block_path, "w+");
-    };
-
-    var block_hash = crypto.createHash('md5'), block_size = 0;
-    this.fd++;
-    this.files[this.fd] = {file_path, entry, block_hash, block_size, tmp_uid, rfd};
-    console.log("OPNEDED IN", this.fd, rfd, block_path);
-    return this.fd;
-  }
 
   async open(file_path, flags) {
     console.log('open(%s, %d)', file_path, flags);
@@ -186,6 +169,23 @@ class cloudfs {
   }
 
   /*
+
+  async _open_w(file_path) {
+    var entry = await this._get_entry(file_path);
+    //temp block_path
+    var tmp_uid = guid();
+    var block_path = tmp_uid;
+    var rfd  = function() {
+      return fs.openSync(block_path, "w+");
+    };
+
+    var block_hash = crypto.createHash('md5'), block_size = 0;
+    this.fd++;
+    this.files[this.fd] = {file_path, entry, block_hash, block_size, tmp_uid, rfd};
+    console.log("OPNEDED IN", this.fd, rfd, block_path);
+    return this.fd;
+  }
+
   //block should already have been registered
   async register_file(file_path, block_hash) {
     let stat  = fs.statSync(file_path);

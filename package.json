@@ -16,7 +16,7 @@
     "fuse-bindings": "^2.11.0",
     "mout": "^1.0.0",
     "nyks": "^5.12.6",
-    "random-read-http": "^1.0.1",
+    "random-read-http": "^1.0.2",
     "sqlitefs": "^1.0.3",
     "swift": "^2.5.0"
   },

@@ -1,0 +1,16 @@
+[{
+    "file_path"  : "/this/is/a/path/to/an/file/empty",
+    "file_size"  : 0,
+    "block_hash" : "d41d8cd98f00b204e9800998ecf8427e",
+    "file_mode"  : 33206
+  }, {
+    "file_path"  : "/this/ping",
+    "file_size"  : 4,
+    "block_hash" : "df911f0151f9ef021d410b4be5060972",
+    "file_mode"  : 33206
+  }, {
+    "file_path"  : "/that/pong",
+    "file_size"  : 4,
+    "block_hash" : "6fdb087aa3fbfbcb8287a593a0919e61",
+    "file_mode"  : 33206
+}]

@@ -1,5 +1,19 @@
 Cloudfs.
 
+// make it work, make is fast, make it clean
+
+
+[![Build Status](https://travis-ci.org/131/cloudfs.svg?branch=master)](https://travis-ci.org/131/cloudfs)
+[![Coverage Status](https://coveralls.io/repos/github/131/cloudfs/badge.svg?branch=master)](https://coveralls.io/github/131/cloudfs?branch=master)
+[![Version](https://img.shields.io/npm/v/cloudfs.svg)](https://www.npmjs.com/package/cloudfs)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)
+[![Code style](https://img.shields.io/badge/code%2fstyle-ivs-green.svg)](https://www.npmjs.com/package/eslint-plugin-ivs)
+
+![Available platform](https://img.shields.io/badge/platform-win32-blue.svg)
+![Available platform](https://img.shields.io/badge/platform-linux-blue.svg)
+
+
+# Motivation
 
 Unlimited drive.
 
@@ -10,13 +24,18 @@ cloudfs store file contents in a CAS designed cloud object storage backend [open
 # Roadmap
 - [X] Read Only POC using full openstack creds
 - [X] Full Read Only POC using tempUrl keys (no full creds ever required)
-
 - [X] Writable Inodes POC (rename, delete, mkdir)
+- [X] Minimal fs driver
+- [X] Initial test flow (through fs driver)
+
 - [ ] Writable/editable files
 - [ ] Proper deployment flow
 - [ ] Support for nwjs (fuse-binding & sqlite3)
 - [ ] Embbed configuration/web browse server
 - [ ] Publish read-only mode
+
+# Background daemon & pending tasks
+- [ ] Garbage collection
 
 
 # Features
@@ -35,14 +54,8 @@ cloudfs store file contents in a CAS designed cloud object storage backend [open
 * Server side TAR creation (so content duplication) - through static large object.
 
 
-
-# Background daemon & pending tasks
-* Garbage collection
-
-
-
 # Related
 * [s3ql](https://github.com/s3ql/) python based, non CAS (but fixed block)
 
-
-
+# Credits
+* [131 - author](https://github.com/131)

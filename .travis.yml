@@ -4,13 +4,11 @@ dist: xenial
 node_js:
 - 8
 before_install:
-  - sudo apt-get install -qq pkg-config fuse libfuse-dev
+  - sudo apt-get install -qq fuse libfuse-dev
   - sudo modprobe fuse
   - sudo chmod 666 /dev/fuse
   - sudo chown root:$USER /etc/fuse.conf
-  - sudo chmod a+rw /dev/loop0
   - echo "user_allow_other" | sudo tee /etc/fuse.conf
-  - sudo cat /etc/fuse.conf
   - fusermount -V
 after_script:
 - npm run coveralls

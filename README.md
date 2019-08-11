@@ -27,15 +27,16 @@ cloudfs store file contents in a CAS designed cloud object storage backend [open
 - [X] Writable Inodes POC (rename, delete, mkdir)
 - [X] Minimal fs driver
 - [X] Initial test flow (through fs driver)
+- [X] Proper deployment flow
 
-- [ ] Writable/editable files
-- [ ] Proper deployment flow
-- [ ] Support for nwjs (fuse-binding & sqlite3)
+- [ ] Writable/editable files <= *current*
 - [ ] Embbed configuration/web browse server
 - [ ] Publish read-only mode
+- [ ] With full test suite (e.g. winfsp/secfs test suite)
 
 # Background daemon & pending tasks
 - [ ] Garbage collection
+- [ ] Support for nwjs (fuse-binding & sqlite3)
 
 
 # Features

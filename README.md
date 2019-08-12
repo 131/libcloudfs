@@ -28,8 +28,11 @@ cloudfs store file contents in a CAS designed cloud object storage backend [open
 - [X] Minimal fs driver
 - [X] Initial test flow (through fs driver)
 - [X] Proper deployment flow
+- [X] Writable/editable files (fs mode)
 
-- [ ] Writable/editable files <= *current*
+- [ ] Writable/editable big files (fs mode)  <= *current*
+- [ ] Writable files (cloud mode)
+- [ ] Writable big files (cloud mode)
 - [ ] Embbed configuration/web browse server
 - [ ] Publish read-only mode
 - [ ] With full test suite (e.g. winfsp/secfs test suite)

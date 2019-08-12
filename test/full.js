@@ -10,10 +10,11 @@ const tmppath = require('nyks/fs/tmppath');
 const drain = require('nyks/stream/drain');
 const promisify = require('nyks/function/promisify');
 const glob  = promisify(require('glob'));
+const sleep  = require('nyks/async/sleep');
 
 const Localcasfs = require('../lib/localcasfs');
 
-const {filesize, filemtime, fileExists, touch} = require('../lib/utils');
+const {filesize, fileExists, touch} = require('../lib/utils');//, filemtime
 
 
 /*
@@ -98,12 +99,14 @@ describe("testing localcasfs inode update", function() {
     expect(await fileExists(somepath)).to.be.ok();
   });
 
+  /*
   it("should touch a file at a specific date", async () => {
     let somepath = path.join(mountPath, "/this/is/a/file");
     let when = new Date('1986-02-15T10:14:52.000Z'); //ms are not supported (yet)
     await touch(somepath, when);
     expect(Number(await filemtime(somepath))).to.eql(Number(when));
   });
+  */
 
 });
 
@@ -113,12 +116,17 @@ describe("testing localcasfs data write", function() {
 
   it("should write a simple file", async () => {
     let random = guid(), payload = "this is contents";
-    let somepath = path.join(mountPath, "/this/is/a/newfile");
+    let subpath = "/this/is/a/newfile";
+    let somepath = path.join(mountPath, subpath);
     let dst = fs.createWriteStream(somepath);
-    dst.write(random), dst.end(payload);
+    dst.write(random);
+
+    await sleep(1000);
+    dst.end(payload);
 
     await new Promise(resolve => dst.on('finish', resolve));
 
+    console.log(dst, "Done writing, now checking", await inodes._get_entry(subpath));
     let body = fs.createReadStream(somepath);
     body = String(await drain(body));
     expect(body).to.eql(random + payload);

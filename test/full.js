@@ -112,6 +112,7 @@ describe("testing localcasfs inode update", function() {
 
 
 describe("testing localcasfs data write", function() {
+  this.timeout(60 * 1000);
 
 
   it("should write a simple file", async () => {

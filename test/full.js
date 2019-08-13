@@ -120,10 +120,7 @@ describe("testing localcasfs data write", function() {
     let subpath = "/this/is/a/newfile";
     let somepath = path.join(mountPath, subpath);
     let dst = fs.createWriteStream(somepath);
-    dst.write(random);
-
-    await sleep(1000);
-    dst.end(payload);
+    dst.write(random), dst.end(payload);
 
     await new Promise(resolve => dst.on('finish', resolve));
 

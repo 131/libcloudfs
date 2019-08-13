@@ -10,7 +10,7 @@ const tmppath = require('nyks/fs/tmppath');
 const drain = require('nyks/stream/drain');
 const promisify = require('nyks/function/promisify');
 const glob  = promisify(require('glob'));
-const sleep  = require('nyks/async/sleep');
+//const sleep  = require('nyks/async/sleep');
 
 const Localcasfs = require('../lib/localcasfs');
 

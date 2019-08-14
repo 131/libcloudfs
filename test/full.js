@@ -161,8 +161,8 @@ describe("testing localcasfs data write", function() {
     expect(body).to.eql(random + payload);
   });
 
-  it("should stress file write abit", async () => {
-    for(let i = 0; i < 1000; i++) {
+  it("should write 100times a file", async () => {
+    for(let i = 0; i < 100; i++) {
       let random = guid();
       let subpath = "/somewhere";
       let somepath = path.join(mountPath, subpath);
@@ -171,6 +171,18 @@ describe("testing localcasfs data write", function() {
       expect(challenge).to.eql(random);
     }
   });
+
+  it("should write 100 differents files", async () => {
+    for(let i = 0; i < 100; i++) {
+      let random = guid();
+      let subpath = `/${random}`;
+      let somepath = path.join(mountPath, subpath);
+      fs.writeFileSync(somepath, random);
+      let challenge = fs.readFileSync(somepath, 'utf8');
+      expect(challenge).to.eql(random);
+    }
+  });
+
 });
 
 

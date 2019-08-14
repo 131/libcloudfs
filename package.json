@@ -8,7 +8,7 @@
     "eslint": "eslint .",
     "mocha": "node node_modules/mocha/bin/_mocha -b",
     "cover": "nyc --temp-directory coverage/.nyc_output --silent --reporter none node_modules/mocha/bin/_mocha -b test/ && nyc --temp-directory coverage/.nyc_output  report --include . --report-dir coverage/html/ --reporter text-summary --reporter html --reporter lcov",
-    "coveralls": "npm install coveralls && node ./node_modules/coveralls/bin/coveralls.js < ./coverage/lcov.info"
+    "coveralls": "npm install coveralls && node ./node_modules/coveralls/bin/coveralls.js < ./coverage/html/lcov.info"
   },
   "author": "Francois Leurent <131.js@cloudyks.org>",
   "license": "ISC",

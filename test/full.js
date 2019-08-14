@@ -47,7 +47,8 @@ let moutServer = async () => {
 
 if(process.argv[2] == "child") {
   return moutServer().then(() => {
-    net.connect(process.argv[3]);//trigger back
+    let lnk = net.connect(process.argv[3]);//trigger back
+    lnk.on('error', () => {});
   });
 }
 
@@ -64,6 +65,7 @@ describe("Initial localfs setup", function() {
     var args = ["node_modules/nyc/bin/nyc.js", "--temp-directory", "coverage/.nyc_output", "--preserve-comments", "--reporter", "none", "--silent"];
 
     let server = net.createServer();
+    server.on('error', () => {});
     let port = await new Promise((resolve) => {
       server.listen(() => {
         resolve(server.address().port);
@@ -74,7 +76,8 @@ describe("Initial localfs setup", function() {
     child = cp.spawn('node', args, {'stdio' : 'inherit'});
     console.log("Spawning", process.execPath, args.join(' '));
     console.log("Awaiting for subprocess (mount) to be ready");
-    await new Promise(resolve => server.on('connection', resolve));
+    let lnk = await new Promise(resolve => server.on('connection', resolve));
+    lnk.on('error', () => {});
     console.log("Child is ready, lets proceed");
   });
 });
@@ -159,12 +162,14 @@ describe("testing localcasfs data write", function() {
   });
 
   it("should stress file write abit", async () => {
-    let random = guid();
-    let subpath = "/somewhere";
-    let somepath = path.join(mountPath, subpath);
-    fs.writeFileSync(somepath, random);
-    let challenge = fs.readFileSync(somepath, 'utf8');
-    expect(challenge).to.eql(random);
+    for(let i = 0; i < 1000; i++) {
+      let random = guid();
+      let subpath = "/somewhere";
+      let somepath = path.join(mountPath, subpath);
+      fs.writeFileSync(somepath, random);
+      let challenge = fs.readFileSync(somepath, 'utf8');
+      expect(challenge).to.eql(random);
+    }
   });
 });
 

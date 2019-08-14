@@ -55,14 +55,11 @@ describe("Initial localfs setup", function() {
   this.timeout(10 * 1000);
 
   it("should create a proper mountpoint", async () => {
-    if(process.platform == "win32") {
-      await moutServer();
-      return;
+    if(process.platform != "win32") {
+      try {
+        await passthru("fusermount", ['-u', mountPath]);
+      } catch(err) {}
     }
-
-    try {
-      await passthru("fusermount", ['-u', mountPath]);
-    } catch(err) {}
 
     var args = ["node_modules/nyc/bin/nyc.js", "--temp-directory", "coverage/.nyc_output", "--preserve-comments", "--reporter", "none", "--silent"];
 
@@ -160,18 +157,28 @@ describe("testing localcasfs data write", function() {
     body = String(await drain(body));
     expect(body).to.eql(random + payload);
   });
+
+  it("should stress file write abit", async () => {
+    let random = guid();
+    let subpath = "/somewhere";
+    let somepath = path.join(mountPath, subpath);
+    fs.writeFileSync(somepath, random);
+    let challenge = fs.readFileSync(somepath, 'utf8');
+    expect(challenge).to.eql(random);
+  });
 });
 
 
 describe("Shutting down", function() {
 
   it("Should shutdown child and write coverage", async () => {
-    if(process.platform == "win32")
-      return;
 
     child.kill('SIGINT');
     let exit = await new Promise(resolve => child.on('exit', resolve));
     console.log("Got exit code", exit);
+
+    if(process.platform == "win32")
+      return;
     try {
       await passthru("fusermount", ['-u', mountPath]);
     } catch(err) {}

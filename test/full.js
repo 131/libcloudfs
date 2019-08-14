@@ -60,6 +60,10 @@ describe("Initial localfs setup", function() {
       return;
     }
 
+    try {
+      await passthru("fusermount", ['-u', mountPath]);
+    } catch(err) {}
+
     var args = ["node_modules/nyc/bin/nyc.js", "--temp-directory", "coverage/.nyc_output", "--preserve-comments", "--reporter", "none", "--silent"];
 
     let server = net.createServer();

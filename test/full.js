@@ -124,7 +124,7 @@ describe("testing localcasfs data write", function() {
 
     await new Promise(resolve => dst.on('finish', resolve));
 
-    console.log(dst, "Done writing, now checking", await inodes._get_entry(subpath));
+    console.log("Done writing, now checking", await inodes._get_entry(subpath));
     let body = fs.createReadStream(somepath);
     body = String(await drain(body));
     expect(body).to.eql(random + payload);

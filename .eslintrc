@@ -1,5 +1,8 @@
 {
   "root": true,
+  "parserOptions": {
+    sourceType : "script",
+  },
   "extends": [
     "plugin:ivs/node"
   ]

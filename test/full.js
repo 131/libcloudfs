@@ -12,6 +12,7 @@ const expect = require('expect.js');
 const tmppath = require('nyks/fs/tmppath');
 const drain = require('nyks/stream/drain');
 const promisify = require('nyks/function/promisify');
+const passthru = promisify(require('nyks/child_process/passthru'));
 const glob  = promisify(require('glob'));
 //const sleep  = require('nyks/async/sleep');
 
@@ -19,7 +20,7 @@ const Localcasfs = require('../lib/localcasfs');
 
 const {filesize, fileExists, touch} = require('../lib/utils');//, filemtime
 
-
+let child;
 
 const mountPath = path.join(__dirname, 'nowhere');
 var fixture_paths = path.join(__dirname, 'localcas');
@@ -28,7 +29,7 @@ var  mock = require(path.join(fixture_paths, 'index.json'));
 
 /**
 * Under linux, when fuse and the test suite are running in the same process/thread
-* file close-to-open schematic seems broken 
+* file close-to-open schematic seems broken
 *   e.g. openW => write => openR => closeW(!) => bad contents
 * When running in a separate process
 *  openW => write => closeW => openR => proper contents
@@ -40,28 +41,26 @@ let moutServer = async () => {
   await inodes.warmup();
   await inodes.load(mock);
   let server = new Localcasfs(inodes, fixture_paths);
-  
+
   await server.mount(mountPath);
 };
-
-console.log(process.argv);
 
 if(process.argv[2] == "child") {
   return moutServer().then(() => {
     net.connect(process.argv[3]);//trigger back
- });
+  });
 }
 
 describe("Initial localfs setup", function() {
   this.timeout(10 * 1000);
 
-  it("should create a proper mountpoint", async() => {
+  it("should create a proper mountpoint", async () => {
     if(process.plaltform == "win32") {
       await moutServer();
       return;
     }
 
-    var args = ["node_modules/nyc/bin/nyc.js", "--temp-directory", "coverage/.nyc_output", "--preserve-comments", "--report-dir", "coverage/child", "--reporter", "none", "--silent"];
+    var args = ["node_modules/nyc/bin/nyc.js", "--temp-directory", "coverage/.nyc_output", "--preserve-comments", "--reporter", "none", "--silent"];
 
     let server = net.createServer();
     let port = await new Promise((resolve) => {
@@ -71,9 +70,9 @@ describe("Initial localfs setup", function() {
     });
 
     args.push("node", __filename, "child", port);
-    let child = cp.spawn('node', args, {'stdio': 'inherit'});
+    child = cp.spawn('node', args, {'stdio' : 'inherit'});
     console.log("Spawning", process.execPath, args.join(' '));
-    console.log("AWAITING for the child to como");
+    console.log("Awaiting for subprocess (mount) to be ready");
     await new Promise(resolve => server.on('connection', resolve));
     console.log("Child is ready, lets proceed");
   });
@@ -157,12 +156,23 @@ describe("testing localcasfs data write", function() {
     body = String(await drain(body));
     expect(body).to.eql(random + payload);
   });
-
-
-
-
 });
 
+
+describe("Shuting down", function() {
+  it("Should shutdown child and write coverage", async () => {
+
+    child.kill('SIGINT');
+    let exit = await new Promise(resolve => child.on('exit', resolve));
+    console.log("Got exit code", exit);
+
+    if(process.platform != "win32") {
+      try {
+        await passthru("fusermount", ['-u', mountPath]);
+      } catch(err) {}
+    }
+  });
+});
 
 
 

@@ -55,7 +55,7 @@ describe("Initial localfs setup", function() {
   this.timeout(10 * 1000);
 
   it("should create a proper mountpoint", async () => {
-    if(process.plaltform == "win32") {
+    if(process.platform == "win32") {
       await moutServer();
       return;
     }
@@ -159,18 +159,18 @@ describe("testing localcasfs data write", function() {
 });
 
 
-describe("Shuting down", function() {
+describe("Shutting down", function() {
+
   it("Should shutdown child and write coverage", async () => {
+    if(process.platform == "win32")
+      return;
 
     child.kill('SIGINT');
     let exit = await new Promise(resolve => child.on('exit', resolve));
     console.log("Got exit code", exit);
-
-    if(process.platform != "win32") {
-      try {
-        await passthru("fusermount", ['-u', mountPath]);
-      } catch(err) {}
-    }
+    try {
+      await passthru("fusermount", ['-u', mountPath]);
+    } catch(err) {}
   });
 });
 

@@ -1,7 +1,10 @@
 "use strict";
 
+const net = require('net'); //simple ipc
 const fs = require('fs');
 const path  = require('path');
+const cp   = require('child_process');
+
 const Sqlfs = require('sqlitefs');
 
 const guid   = require('mout/random/guid');
@@ -17,38 +20,63 @@ const Localcasfs = require('../lib/localcasfs');
 const {filesize, fileExists, touch} = require('../lib/utils');//, filemtime
 
 
-/*
-* I'd want to warmup/unmount properly per test suite
-* Yet on windows, unmount is not handled
-* Waiting for https://github.com/fuse-friends/fuse-shared-library/issues/1
-* so i can handle that properly
-*/
 
-var server, inodes; //ULTRA SCOPE (therefore...)
 const mountPath = path.join(__dirname, 'nowhere');
 var fixture_paths = path.join(__dirname, 'localcas');
 var  mock = require(path.join(fixture_paths, 'index.json'));
 
-describe("Initial localfs setup", function() {
 
-
+/**
+* Under linux, when fuse and the test suite are running in the same process/thread
+* file close-to-open schematic seems broken 
+*   e.g. openW => write => openR => closeW(!) => bad contents
+* When running in a separate process
+*  openW => write => closeW => openR => proper contents
+*/
+let moutServer = async () => {
   let inodes_path = tmppath("sqlite");
-  inodes = new Sqlfs(inodes_path);
+  let inodes = new Sqlfs(inodes_path);
 
-  it("should create a proper mountpoint", async () => {
-    await inodes.warmup();
-    await inodes.load(mock);
-    server = new Localcasfs(inodes, fixture_paths);
-    await server.mount(mountPath);
+  await inodes.warmup();
+  await inodes.load(mock);
+  let server = new Localcasfs(inodes, fixture_paths);
+  
+  await server.mount(mountPath);
+};
+
+console.log(process.argv);
+
+if(process.argv[2] == "child") {
+  return moutServer().then(() => {
+    net.connect(process.argv[3]);//trigger back
+ });
+}
+
+describe("Initial localfs setup", function() {
+  this.timeout(10 * 1000);
+
+  it("should create a proper mountpoint", async() => {
+    if(process.plaltform == "win32") {
+      await moutServer();
+      return;
+    }
+
+    var args = ["node_modules/nyc/bin/nyc.js", "--temp-directory", "coverage/.nyc_output", "--preserve-comments", "--report-dir", "coverage/child", "--reporter", "none", "--silent"];
+
+    let server = net.createServer();
+    let port = await new Promise((resolve) => {
+      server.listen(() => {
+        resolve(server.address().port);
+      });
+    });
+
+    args.push("node", __filename, "child", port);
+    let child = cp.spawn('node', args, {'stdio': 'inherit'});
+    console.log("Spawning", process.execPath, args.join(' '));
+    console.log("AWAITING for the child to como");
+    await new Promise(resolve => server.on('connection', resolve));
+    console.log("Child is ready, lets proceed");
   });
-
-  /* //nope
-  after("should shutdown mountpoing", async () => {
-    await inodes.close();
-    await server.close();
-  });
-  */
-
 });
 
 
@@ -124,8 +152,8 @@ describe("testing localcasfs data write", function() {
 
     await new Promise(resolve => dst.on('finish', resolve));
 
-    console.log("Done writing, now checking", await inodes._get_entry(subpath));
-    let body = fs.createReadStream(somepath);
+    console.log("Done writing, now checking");
+    let body = fs.createReadStream(somepath, {flags : 'rs'});
     body = String(await drain(body));
     expect(body).to.eql(random + payload);
   });

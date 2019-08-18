@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm run eslint && npm run cover",
+    "test": "npm run eslint",
     "eslint": "eslint .",
     "mocha": "node node_modules/mocha/bin/_mocha -b",
     "cover": "nyc --temp-directory coverage/.nyc_output --silent --reporter none node_modules/mocha/bin/_mocha -b test/ && nyc --temp-directory coverage/.nyc_output  report --include . --report-dir coverage/html/ --reporter text-summary --reporter html --reporter lcov",
@@ -14,11 +14,9 @@
   "license": "ISC",
   "dependencies": {
     "debug": "^2.3.2",
-    "fuse-bindings": "^2.11.0",
     "mout": "^1.0.0",
     "nyks": "^5.12.6",
     "random-read-http": "^1.0.2",
-    "sqlitefs": "^1.1.0",
     "swift": "^2.5.0"
   },
   "devDependencies": {

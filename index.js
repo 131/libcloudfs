@@ -4,7 +4,7 @@ const Storage = require('swift/storage');
 const RandomReadHTTP = require('random-read-http');
 const sprintf = require('util').format;
 
-const casfs = require('./lib/casfs');
+const casfs = require('casfs');
 
 // this is dummy openstack swift adapter to casfs
 

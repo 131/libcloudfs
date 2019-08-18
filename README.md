@@ -2,7 +2,6 @@ Cloudfs.
 
 // make it work, make is fast, make it clean
 
-
 [![Build Status](https://travis-ci.org/131/cloudfs.svg?branch=master)](https://travis-ci.org/131/cloudfs)
 [![Coverage Status](https://coveralls.io/repos/github/131/cloudfs/badge.svg?branch=master)](https://coveralls.io/github/131/cloudfs?branch=master)
 [![Version](https://img.shields.io/npm/v/cloudfs.svg)](https://www.npmjs.com/package/cloudfs)
@@ -18,17 +17,15 @@ Cloudfs.
 Unlimited drive.
 
 cloudfs is a **file system** that stores all its data in the cloud.
-cloudfs store file contents in a CAS designed cloud object storage backend [openstack swift](https://developer.openstack.org/api-ref/object-store/) and files metadata (inode table) in an SQL database (sqlite - [see dedicated sqlfs project](https://github.com/131/sqlitefs)).
-
+cloudfs store file contents in a [CAS designed](https://github.com/131/casfs) cloud object storage backend [openstack swift](https://developer.openstack.org/api-ref/object-store/) and files metadata (inode table) in an SQL database (sqlite - [see dedicated sqlfs project](https://github.com/131/sqlitefs)).
 
 
 # Project structure
 The [cloudfs](https://github.com/131/cloudfs) is designed around simplicity. 
 * The inode management API (see sqlfs)
-* A fuse binding interface
-* A file (localcasfs) driver, to challenge implementation, confirm design and stress
-* A network/swift driver
-
+* A [fuse bindings](https://github.com/mafintosh/fuse-bindings) interface
+* A battle tested [casfs](https://github.com/131/casfs) backend, to challenge implementation, confirm design and stress
+* An openstack/[swift](https://github.com/131/swift) driver
 
 
 # Roadmap
@@ -41,8 +38,7 @@ The [cloudfs](https://github.com/131/cloudfs) is designed around simplicity.
 - [X] Writable/editable files (fs mode)
 - [X] a bit better test suite (win/linux)
 
-- [ ] (create dedicated project for writable big fs chunks)  <= *current*
-- [ ] Writable/editable big files (fs mode)
+- [X] (create dedicated project for writable big fs chunks) - see [casfs - dedicated project](https://github.com/131/casfs) <= *current*
 - [ ] Writable files (cloud mode)
 - [ ] Writable big files (cloud mode)
 - [ ] Embbed configuration/web browse server
@@ -72,7 +68,9 @@ The [cloudfs](https://github.com/131/cloudfs) is designed around simplicity.
 
 
 # Related
+* [casfs](https://github.com/131/casfs/) main backend
 * [s3ql](https://github.com/s3ql/) python based, non CAS (but fixed block)
 
-# Credits
+# Credits/thanks
 * [131 - author](https://github.com/131)
+* [fuse bindings](https://github.com/mafintosh/fuse-bindings)

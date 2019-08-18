@@ -21,6 +21,16 @@ cloudfs is a **file system** that stores all its data in the cloud.
 cloudfs store file contents in a CAS designed cloud object storage backend [openstack swift](https://developer.openstack.org/api-ref/object-store/) and files metadata (inode table) in an SQL database (sqlite - [see dedicated sqlfs project](https://github.com/131/sqlitefs)).
 
 
+
+# Project structure
+The [cloudfs](https://github.com/131/cloudfs) is designed around simplicity. 
+* The inode management API (see sqlfs)
+* A fuse binding interface
+* A file (localcasfs) driver, to challenge implementation, confirm design and stress
+* A network/swift driver
+
+
+
 # Roadmap
 - [X] Read Only POC using full openstack creds
 - [X] Full Read Only POC using tempUrl keys (no full creds ever required)
@@ -29,8 +39,10 @@ cloudfs store file contents in a CAS designed cloud object storage backend [open
 - [X] Initial test flow (through fs driver)
 - [X] Proper deployment flow
 - [X] Writable/editable files (fs mode)
+- [X] a bit better test suite (win/linux)
 
-- [ ] Writable/editable big files (fs mode)  <= *current*
+- [ ] (create dedicated project for writable big fs chunks)  <= *current*
+- [ ] Writable/editable big files (fs mode)
 - [ ] Writable files (cloud mode)
 - [ ] Writable big files (cloud mode)
 - [ ] Embbed configuration/web browse server
@@ -44,6 +56,7 @@ cloudfs store file contents in a CAS designed cloud object storage backend [open
 
 # Features
 * Simple by design
+* Unlimited file size (cloudfs is mostly designed to store and manage 100k files of 8GB+ - aka HD BR rips)
 * Available on all platforms (linux & Windows)
 * Fast (sqlite is actually fastest than most file system)
 * large subset of POSIX including reading/writing files, directories, rename,  symlinks, mode, uid/gid, and extended attributes

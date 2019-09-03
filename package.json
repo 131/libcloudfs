@@ -17,7 +17,7 @@
     "debug": "^2.3.2",
     "mout": "^1.0.0",
     "nyks": "^5.12.6",
-    "random-read-http": "^1.0.3",
+    "random-read-http": "^1.0.4",
     "swift": "^2.5.3"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 Cloudfs.
 
-// make it work, make is fast, make it clean
+// make it work, make it simple, make is fast, make it clean
 
 [![Build Status](https://travis-ci.org/131/cloudfs.svg?branch=master)](https://travis-ci.org/131/cloudfs)
 [![Coverage Status](https://coveralls.io/repos/github/131/cloudfs/badge.svg?branch=master)](https://coveralls.io/github/131/cloudfs?branch=master)
@@ -37,10 +37,11 @@ The [cloudfs](https://github.com/131/cloudfs) is designed around simplicity.
 - [X] Proper deployment flow
 - [X] Writable/editable files (fs mode)
 - [X] a bit better test suite (win/linux)
+- [X] (create dedicated project for writable big fs chunks) - see [casfs - dedicated project](https://github.com/131/casfs)
 
-- [X] (create dedicated project for writable big fs chunks) - see [casfs - dedicated project](https://github.com/131/casfs) <= *current*
-- [ ] Writable files (cloud mode)
-- [ ] Writable big files (cloud mode)
+- [ ] Testable SeqWriteHTTP module  <= *current*
+- [ ] Integrated writable files (with bigfile support)
+
 - [ ] Embbed configuration/web browse server
 - [ ] Publish read-only mode
 - [ ] With full test suite (e.g. winfsp/secfs test suite)

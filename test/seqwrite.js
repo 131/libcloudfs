@@ -50,12 +50,12 @@ describe("SeqwriteHTTP test", function() {
     expect(res).to.be.ok();
   });
 
-  it("should cleanup all existing files", async() => {
+  it("should cleanup all existing files", async () => {
     var res = await Storage.getFileList(storage_ctx, storage_container);
     console.log("Should purge %d files", res.length);
     await eachLimit(res, 5, async (file) => {
       await Storage.deleteFile(storage_ctx, storage_container, file.name);
-    })
+    });
   });
 
   it("should write a bigfile", async () => {
@@ -75,8 +75,10 @@ describe("SeqwriteHTTP test", function() {
     console.log("Done writing, now checking");
     let final_path = block_path(block_hash);
     let remote = await Storage.download(storage_ctx, storage_container, final_path);
+    expect(remote.headers['content-type']).to.eql('application/large-file');
     remote = String(await drain(remote));
     expect(remote).to.eql(payload);
+
   });
 });
 

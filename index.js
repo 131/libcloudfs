@@ -6,8 +6,6 @@ const RandomReadHTTP = require('random-read-http');
 const SeqWriteHTTP   = require('./lib/seqwritehttp');
 const CCD            = require('./lib/ccd');
 
-const guid    = require('mout/random/guid');
-const sprintf = require('util').format;
 
 const casfs   = require('casfs');
 

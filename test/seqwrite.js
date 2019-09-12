@@ -6,6 +6,10 @@ const expect = require('expect.js');
 const bl     = require('bl');
 
 const guid    = require('mout/random/guid');
+const md5     = require('nyks/crypto/md5');
+const drain   = require('nyks/stream/drain');
+const eachLimit = require('nyks/async/eachLimit');
+
 const Storage = require('swift/storage');
 const Context = require('swift/context');
 
@@ -35,7 +39,7 @@ const block_path = function(hash) {
   return sprintf("%s/%s/%s", hash.substr(0, 2), hash.substr(2, 1), hash);
 };
 
-var storage_ctx, lnk;
+var storage_ctx;
 
 describe("SeqwriteHTTP test", function() {
   this.timeout(10 * 1000);
@@ -46,13 +50,20 @@ describe("SeqwriteHTTP test", function() {
     expect(res).to.be.ok();
   });
 
+  it("should cleanup all existing files", async() => {
+    var res = await Storage.getFileList(storage_ctx, storage_container);
+    console.log("Should purge %d files", res.length);
+    await eachLimit(res, 5, async (file) => {
+      await Storage.deleteFile(storage_ctx, storage_container, file.name);
+    })
+  });
+
   it("should write a bigfile", async () => {
 
-    writer = new SeqWriteHTTP({storage_ctx, storage_container, block_path});
-  
-    let payload = [guid(), guid(), guid(), guid()].join("\n"); //more than 60
-    let body = bl(payload);
+    let writer = new SeqWriteHTTP({storage_ctx, storage_container, block_path});
 
+    let payload = [guid(), guid(), guid(), guid()].join("\n"); //more than 60
+    let body = bl(payload), body_md5 = md5(payload);
     let size = await new Promise(resolve => writer.write(body, body.length, 0, resolve));
 
     expect(size).to.eql(body.length);
@@ -65,7 +76,7 @@ describe("SeqwriteHTTP test", function() {
     let final_path = block_path(block_hash);
     let remote = await Storage.download(storage_ctx, storage_container, final_path);
     remote = String(await drain(remote));
-    expect(remote).to.eql(body);
+    expect(remote).to.eql(payload);
   });
 });
 

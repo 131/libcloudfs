@@ -18,6 +18,7 @@ class cloudfs extends casfs {
 
     this.storage_ctx       = storage_ctx;
     this.storage_container = storage_container;
+
     this.ccd = new CCD({
       storage_ctx       : this.storage_ctx,
       storage_container : this.storage_container,

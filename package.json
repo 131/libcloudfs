@@ -17,9 +17,9 @@
     "casfs": "^1.0.9",
     "debug": "^2.3.2",
     "mout": "^1.0.0",
-    "nyks": "^5.12.6",
+    "nyks": "^5.14.1",
     "random-read-http": "^1.0.4",
-    "swift": "^2.6.0"
+    "swift": "^2.6.1"
   },
   "devDependencies": {
     "eslint-plugin-ivs": "^2.1.0",

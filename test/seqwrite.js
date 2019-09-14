@@ -78,8 +78,10 @@ describe("SeqwriteHTTP test", function() {
     expect(remote.headers['content-type']).to.eql('application/large-file');
     remote = String(await drain(remote));
     expect(remote).to.eql(payload);
-
   });
+
+
+
 });
 
 /*

@@ -13,8 +13,8 @@ const casfs   = require('casfs');
 
 class cloudfs extends casfs {
 
-  constructor(inodes, storage_ctx, storage_container) {
-    super(inodes);
+  constructor(inodes, storage_ctx, storage_container, options) {
+    super(inodes, options);
 
     this.storage_ctx       = storage_ctx;
     this.storage_container = storage_container;

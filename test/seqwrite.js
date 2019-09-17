@@ -3,8 +3,6 @@
 const sprintf = require('util').format;
 const expect = require('expect.js');
 
-const bl     = require('bl');
-
 const guid    = require('mout/random/guid');
 const md5     = require('nyks/crypto/md5');
 const drain   = require('nyks/stream/drain');
@@ -63,7 +61,7 @@ describe("SeqwriteHTTP test", function() {
     let writer = new SeqWriteHTTP({storage_ctx, storage_container, block_path});
 
     let payload = [guid(), guid(), guid(), guid()].join("\n"); //more than 60
-    let body = bl(payload), body_md5 = md5(payload);
+    let body = Buffer.from(payload), body_md5 = md5(payload);
     let size = await new Promise(resolve => writer.write(body, body.length, 0, resolve));
 
     expect(size).to.eql(body.length);

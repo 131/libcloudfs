@@ -17,12 +17,12 @@ Cloudfs.
 Unlimited drive.
 
 cloudfs is a **file system** that stores all its data in the cloud.
-cloudfs store file contents in a [CAS designed](https://github.com/131/casfs) cloud object storage backend [openstack swift](https://developer.openstack.org/api-ref/object-store/) and files metadata (inode table) in an SQL database (sqlite - [see dedicated sqlfs project](https://github.com/131/sqlitefs)).
+cloudfs store file contents in a [CAS designed](https://github.com/131/casfs) cloud object storage backend [openstack swift](https://developer.openstack.org/api-ref/object-store/) and files metadata (inode table) in an [SQLlite database](https://github.com/131/sqlfs).
 
 
 # Project structure
 The [cloudfs](https://github.com/131/cloudfs) is designed around simplicity. 
-* The inode management API (see sqlfs)
+* An isolated inode management API (see [sqlfs](https://github.com/131/sqlfs))
 * A [fuse bindings](https://github.com/mafintosh/fuse-bindings) interface
 * A battle tested [casfs](https://github.com/131/casfs) backend, to challenge implementation, confirm design and stress
 * An openstack/[swift](https://github.com/131/swift) driver
@@ -39,22 +39,19 @@ The [cloudfs](https://github.com/131/cloudfs) is designed around simplicity.
 - [X] a bit better test suite (win/linux)
 - [X] (create dedicated project for writable big fs chunks) - see [casfs - dedicated project](https://github.com/131/casfs)
 
-- [ ] Testable SeqWriteHTTP module  <= *current*
-- [ ] Integrated writable files (with bigfile support)
+- [X] Testable SeqWriteHTTP module
+- [X] Integrated writable files (with bigfile support)
+- [X] Publish read-only mode
 
+- [ ] Temporary write file garbage collector  <= *current*
 - [ ] Embbed configuration/web browse server
-- [ ] Publish read-only mode
-- [ ] With full test suite (e.g. winfsp/secfs test suite)
-
-# Background daemon & pending tasks
-- [ ] Garbage collection
 - [ ] Support for nwjs (fuse-binding & sqlite3)
 
 
 # Features
 * Simple by design
-* Unlimited file size (cloudfs is mostly designed to store and manage 100k files of 8GB+ - aka HD BR rips)
 * Available on all platforms (linux & Windows)
+* Unlimited file size (cloudfs is mostly designed to store and manage 100k files of 8GB+ - aka HD BR rips)
 * Fast (sqlite is actually fastest than most file system)
 * large subset of POSIX including reading/writing files, directories, rename,  symlinks, mode, uid/gid, and extended attributes
 * renames do not invole any kind of server side copy
@@ -70,6 +67,7 @@ The [cloudfs](https://github.com/131/cloudfs) is designed around simplicity.
 
 # Related
 * [casfs](https://github.com/131/casfs/) main backend
+* [sqlfs](https://github.com/131/sqlfs/) inode backend
 * [s3ql](https://github.com/s3ql/) python based, non CAS (but fixed block)
 
 # Credits/thanks

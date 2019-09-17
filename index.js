@@ -1,17 +1,16 @@
 "use strict";
 
-const Storage = require('swift/storage');
+const Storage  = require('swift/storage');
 
 const RandomReadHTTP = require('random-read-http');
 const SeqWriteHTTP   = require('./lib/seqwritehttp');
 const CCD            = require('./lib/ccd');
 
-
 const casfs   = require('casfs');
 
 // this is dummy openstack swift adapter to casfs
 
-class cloudfs extends casfs {
+class Cloudfs extends casfs {
 
   constructor(inodes, storage_ctx, storage_container, options) {
     super(inodes, options);
@@ -42,7 +41,9 @@ class cloudfs extends casfs {
       block_path        : this.block_path,
     });
   }
+
+
 }
 
 
-module.exports = cloudfs;
+module.exports = Cloudfs;

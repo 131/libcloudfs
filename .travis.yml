@@ -1,20 +1,40 @@
-language: node_js
-sudo: required
-dist: xenial
-node_js:
-- 8
-before_install:
-  - sudo apt-get install -qq fuse libfuse-dev
-  - sudo modprobe fuse
-  - sudo chmod 666 /dev/fuse
-  - sudo chown root:$USER /etc/fuse.conf
-  - echo "user_allow_other" | sudo tee /etc/fuse.conf
-  - fusermount -V
-after_script:
-- npm run coveralls
-deploy:
-  provider: npm
-  email: 131.frodon@cloudyks.org
-  api_key: $NPM_TOKEN
-  on:
-    tags: true
+matrix:
+  include:
+  - os: linux
+    language: node_js
+    sudo: required
+    dist: xenial
+    node_js:
+    - 8
+    before_install:
+      - sudo apt-get install -qq fuse libfuse-dev
+      - sudo modprobe fuse
+      - sudo chmod 666 /dev/fuse
+      - sudo chown root:$USER /etc/fuse.conf
+      - echo "user_allow_other" | sudo tee /etc/fuse.conf
+      - fusermount -V
+    after_script:
+    - npm run coveralls
+    deploy:
+      provider: npm
+      email: 131.frodon@cloudyks.org
+      api_key: $NPM_TOKEN
+      on:
+        tags: true
+
+  - os: windows
+    language: node_js
+    node_js:
+    - 8
+    after_script:
+    - choco install winfsp
+    deploy:
+      provider: releases
+      api_key:
+         secure: $GITHUB_TOKEN
+      file:
+         - index.js
+      skip_cleanup: true
+      on:
+         repo: https://github.com/131/cloudfs
+         tags: true

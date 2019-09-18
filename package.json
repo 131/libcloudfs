@@ -18,7 +18,7 @@
     "mout": "^1.0.0",
     "nyks": "^5.14.1",
     "random-read-http": "^1.0.5",
-    "sqlitefs": "^1.1.3",
+    "sqlitefs": "^1.1.4",
     "swift": "^2.6.1"
   },
   "devDependencies": {

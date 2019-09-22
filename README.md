@@ -38,14 +38,15 @@ The [cloudfs](https://github.com/131/cloudfs) is designed around simplicity.
 - [X] Writable/editable files (fs mode)
 - [X] a bit better test suite (win/linux)
 - [X] (create dedicated project for writable big fs chunks) - see [casfs - dedicated project](https://github.com/131/casfs)
-
 - [X] Testable SeqWriteHTTP module
 - [X] Integrated writable files (with bigfile support)
 - [X] Publish read-only mode
+- [X] Temp write file consolidation
 
-- [ ] Temporary write file garbage collector  <= *current*
+- [ ] Make cloudfs available for windows under github releases  <= *current*
 - [ ] Embbed configuration/web browse server
 - [ ] Support for nwjs (fuse-binding & sqlite3)
+- [ ] garbage collector
 
 
 # Features

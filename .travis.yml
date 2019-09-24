@@ -36,5 +36,4 @@ matrix:
          - index.js
       skip_cleanup: true
       on:
-         repo: https://github.com/131/cloudfs
          tags: true

@@ -48,10 +48,12 @@ The [cloudfs](https://github.com/131/cloudfs) is designed around simplicity.
 - [X] Integrated writable files (with bigfile support)
 - [X] Publish read-only mode
 - [X] Temp write file consolidation
+- [X] Make cloudfs available for windows under github releases
 
-- [ ] Make cloudfs available for windows under github releases  <= *current*
-- [ ] Embbed configuration/web browse server
-- [ ] Support for nwjs (fuse-binding & sqlite3)
+
+## Upcoming roadmap
+- [ ] Embbed configuration/web browse server    <= *current*
+- [ ] Support for nwjs (fuse-binding & sqlite3) <= *current*
 - [ ] garbage collector
 
 

@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+set -xe
+
+here=$(dirname "$0")
+
+SOURCE_DIR=release
+PACKAGE_VVERSION=v$(node -p "require('./package.json').version")
+PACKAGE_NAME="Cloudfs"
+
+rm -rf $SOURCE_DIR
+mkdir -p $SOURCE_DIR
+
+cp -r package.json index.js lib bin $SOURCE_DIR/
+cd $SOURCE_DIR
+npm install --legacy-bundling @131/fuse-bindings @131/sqlite3 cnyks
+npm install --production --legacy-bundling
+cd ..
+
+
+if [ "$TRAVIS_TAG" != "" ]; then
+  PACKAGE_VVERSION=$TRAVIS_TAG
+fi
+
+if [ "$OUTPUT_PATH" != "" ]; then
+  OUTPUT_PATH=cloudfs_${PACKAGE_VVERSION}.msi
+fi
+
+
+export PACKAGE_NAME
+export OUTPUT_PATH
+export PACKAGE_VERSION=${PACKAGE_VVERSION:1}
+export PACKAGE_GUID=975319ba-e200-11e9-9ee8-106530559313
+export SHORTCUT_GUID=$(python  -c 'import uuid; print uuid.uuid1()')
+export WSLENV=PACKAGE_VERSION:PACKAGE_GUID:PACKAGE_NAME:SHORTCUT_GUID
+SOURCE_DIR=release
+
+
+
+cp -r node_modules $SOURCE_DIR/
+rm -rf $SOURCE_DIR/node_modules/@131/fuse-bindings/node_modules/prebuild
+cp $(which node.exe) $SOURCE_DIR/
+cp $here/start.cmd $SOURCE_DIR/
+
+
+heat.exe dir $SOURCE_DIR -nologo -srd  -gg -sfrag -template fragment -dr APPDIR  -cg ALLFILES  -out $here/directory.wxs
+candle.exe -nologo  -ext WixUtilExtension  -out $here/ $here/directory.wxs $here/app.wxs
+light.exe -nologo -sice:ICE91 -sice:ICE64 -sice:ICE38 -sice:ICE18 -sice:ICE43 -sice:ICE57 -ext WixUtilExtension  -b $SOURCE_DIR $here/directory.wixobj $here/app.wixobj -o $OUTPUT_PATH
+
+ls -lah
+

@@ -4,3 +4,8 @@
 /disc
 /test/credentials.json
 /data
+*.msi
+*.wixpdb
+*.wixobj
+dist/directory.wxs
+release

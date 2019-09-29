@@ -11,6 +11,12 @@ Cloudfs.
 ![Available platform](https://img.shields.io/badge/platform-win32-blue.svg)
 ![Available platform](https://img.shields.io/badge/platform-linux-blue.svg)
 
+# Installation
+* Download and install [WinFsp](http://www.secfs.net/winfsp/download/)
+* Download and install [cloudfs (available through github releases)](https://github.com/131/cloudfs/releases)
+* Write configuration file in %LOCALAPPDATA%\Cloudfs\config\config.json (no documentation available for now)
+* Enjoy !
+
 
 # Motivation
 

@@ -24,16 +24,24 @@ matrix:
 
   - os: windows
     language: node_js
+    env:
+      - WSLENV=TRAVIS_TAG
+      - OUTPUT_PATH=Cloudfs_$TRAVIS_TAG.msi
     node_js:
     - 8
     before_install:
-    - choco install winfsp
+    - powershell Install-WindowsFeature Net-Framework-Core
+    - choco install winfsp wixtoolset
+    - export PATH=$PATH:";C:\Program Files (x86)\WiX Toolset v3.11\bin"
+    install:
+    - bash dist/make
+    script: skip     #skip tests 
     deploy:
       provider: releases
       api_key:
          secure: $GITHUB_TOKEN
       file:
-         - index.js
+         - $OUTPUT_PATH
       skip_cleanup: true
       on:
          tags: true

@@ -20,6 +20,11 @@ jobs:
     - run: fusermount -V
     - run: npm install
     - run: npm test
+      env:
+        OS_USERNAME: ${{ secrets.OS_USERNAME }}
+        OS_PASSWORD: ${{ secrets.OS_PASSWORD }}
+        OS_TENANT_ID: ${{ secrets.OS_TENANT_ID }}
+        OS_REGION_NAME: ${{ secrets.OS_REGION_NAME }}
     - run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

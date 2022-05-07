@@ -2,12 +2,12 @@
 
 const http  = require('http');
 const Sqlfs   = require('sqlitefs');
-const Cloudfs = require('cloudfs');
+const Cloudfs = require('libcloudfs');
 
 const SContext = require('swift/context');
 const Storage  = require('swift/storage');
 const sprintf = require('util').format;
-const CCD     = require('cloudfs/lib/ccd');
+const CCD     = require('libcloudfs/lib/ccd');
 const eachLimit = require('nyks/async/eachLimit');
 
 const storage_container = "trashme_tests_ci";

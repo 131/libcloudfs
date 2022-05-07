@@ -1,6 +1,6 @@
 # About seqwritehttp
 
-SeqWriteHTTP is the dedicated module that power cloudfs capability to create & store new content. All files metadata update (create/touch/unlink) are handled by sqlfsn yet, pushing immutable content to a openstack swift designed cas is no easy task.
+SeqWriteHTTP is the dedicated module that power cloudfs capability to create & store new content. All files metadata update (create/touch/unlink) are handled by sqlfs yet, pushing immutable content to a openstack swift designed cas is not an easy task.
 
 # Motivation
 

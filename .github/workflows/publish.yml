@@ -1,0 +1,25 @@
+name: publish
+on:
+  create:
+    tags:
+      - 'v*'
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '12.x'
+        registry-url: 'https://registry.npmjs.org'
+    - run: sudo apt-get install -qq fuse libfuse-dev
+    - run: sudo modprobe fuse
+    - run: sudo chmod 666 /dev/fuse
+    - run: sudo chown root:$USER /etc/fuse.conf
+    - run: echo "user_allow_other" | sudo tee /etc/fuse.conf
+    - run: fusermount -V
+    - run: npm install
+    - run: npm test
+    - run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

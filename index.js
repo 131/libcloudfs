@@ -10,7 +10,7 @@ const casfs   = require('casfs');
 
 // this is dummy openstack swift adapter to casfs
 
-class Cloudfs extends casfs {
+class libcloudfs extends casfs {
 
   constructor(inodes, storage_ctx, storage_container, options) {
     super(inodes, options);
@@ -46,4 +46,4 @@ class Cloudfs extends casfs {
 }
 
 
-module.exports = Cloudfs;
+module.exports = libcloudfs;

@@ -12,6 +12,7 @@ const Storage = require('swift/storage');
 const Context = require('swift/context');
 
 var creds;
+
 if(process.env['OS_USERNAME']) {
   creds = {
     "username" : process.env['OS_USERNAME'],

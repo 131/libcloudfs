@@ -9,7 +9,7 @@ Unlimited drive.
 [libcloudfs](https://github.com/131/libcloudfs) is  a **file system** that stores all its data in the cloud. it stores file contents in a [CAS designed](https://github.com/131/casfs) cloud object storage backend [openstack swift](https://developer.openstack.org/api-ref/object-store/) and files metadata (inode table) in an [SQLlite database](https://github.com/131/sqlfs).
 
 
-[![Build Status](https://travis-ci.org/131/libcloudfs.svg?branch=master)](https://travis-ci.org/131/libcloudfs)
+[![Build Status](https://github.com/131/libcloudfs/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/131/libcloudfs/actions/workflows/test.yml)
 [![Coverage Status](https://coveralls.io/repos/github/131/libcloudfs/badge.svg?branch=master)](https://coveralls.io/github/131/libcloudfs?branch=master)
 [![Version](https://img.shields.io/npm/v/libcloudfs.svg)](https://www.npmjs.com/package/libcloudfs)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](http://opensource.org/licenses/MIT)

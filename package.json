@@ -17,7 +17,7 @@
     "debug": "^2.3.2",
     "mout": "^1.0.0",
     "nyks": "^6.4.1",
-    "random-read-http": "^1.0.8",
+    "random-read-http": "^1.0.9",
     "sqlitefs": "^1.1.5",
     "swift": "^2.8.0"
   },
